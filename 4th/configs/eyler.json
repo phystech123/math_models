@@ -1,0 +1,13 @@
+{
+    "algo": "eyler",
+    "V0":10,
+    "X0":0,
+    "h":0.001,
+    "N":100000,
+    "files": [
+    {
+    "x": "datas/dataX_eyler.csv", 
+    "v": "datas/dataV_eyler.csv"
+    }
+    ]
+}
