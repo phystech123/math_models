@@ -1,0 +1,13 @@
+{
+    "algo": "hoin",
+    "V0":10,
+    "X0":0,
+    "h":0.01,
+    "N":1000000,
+    "files": [
+    {
+    "x": "datas/dataX_hoin.csv", 
+    "v": "datas/dataV_hoin.csv"
+    }
+    ]
+}

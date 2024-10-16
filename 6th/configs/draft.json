@@ -1,0 +1,22 @@
+{
+    "equation": "x'' = -w ** 2 * sin(x)",
+    
+    "params":[
+        {
+        "V0":10,
+        "X0":0
+        }
+    ],
+
+    "algo": "eyler",
+    "h":0.001,
+    "N":100000,
+
+    "output_files": [
+    {
+    "x": "datas/dataX_eyler.csv", 
+    "v": "datas/dataV_eyler.csv"
+    }
+    ]
+
+}
