@@ -1,10 +1,11 @@
 {
-    "equation": "x'' = -w ** 2 * sin(x)",
+    "equation": "simle_garmonic",
+    "order":2,
     
     "params":[
         {
-        "V0":10,
-        "X0":0
+        "1":10,
+        "2":0
         }
     ],
 
@@ -14,8 +15,8 @@
 
     "output_files": [
     {
-    "x": "datas/dataX_eyler.csv", 
-    "v": "datas/dataV_eyler.csv"
+    "1": "datas/dataX_eyler.csv", 
+    "2": "datas/dataV_eyler.csv"
     }
     ]
 

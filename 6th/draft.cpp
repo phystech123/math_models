@@ -3,44 +3,109 @@
 #include<string>
 #include<cmath>
 #include<nlohmann/json.hpp> //import json as new type
-#include<typeinfo>  
+#include<typeinfo>
+#include<vector>
 
 using namespace std;
 using json = nlohmann::json; //renaming namespace
 
 class equality{
-    equality(){
-
+    string equation;
+    equality(json config){
+        equation = config["equation"];
     }
     ~equality(){
 
+    }
+    auto make_func(){
+        if(equation == "simple_garmonic"){
+            return simple_garmonic;
+        }
+        // else if(equation == ...){
+
+        // }
+        // else if(equation == ...){
+
+        // }
+    }
+    double* simple_garmonic(double t){
+        return()
     }
 
 };
 
 class counting{
+    double* grid = nullptr;
+    int order;
+    double* params = nullptr;
+    string algo;
+    double h;
+    int N;
+    string* output_files = nullptr;
+    double** arrays = nullptr;
+    
     counting(json config){
+        order = config["order"];
+        N = config["N"];
+        h = config["h"];
+        algo = config["algo"];
+
+        params = new double[order];
+        for(int i = 0; i < order; i++){
+            params[i] = config["params"][0][to_string(i)];
+        }
+
+        output_files = new string[order];
+        for(int i = 0; i < order; i++){
+            output_files[i] = config["output_files"][0][to_string(i)];
+        }
+
+        grid = new double[N];
+        sep();
+
+        arrays = new double*[order];
+        for(int i = 0; i < order; i++){
+            arrays[i] = new double[N];
+        }
         
-        
+
     }
     ~counting(){
-
+        if(grid != nullptr) delete[] grid;
+        if(params != nullptr) delete[] params;
+        if(output_files != nullptr) delete[] output_files;
+        // for(int i = 0; i < order; i++){
+        //     delete[] arrays[i];
+        // }
+        // delete[] arrays;
+    }
+    
+    void count(){
+        if(algo == "eyler"){
+        eyler();
+    }
+    else if(algo == "hoin"){
+        hoin();
+    }
+    else if(algo == "RK4"){
+        RK4();
+    }
     }
 
     // grid
-    void sep(double* arr, int N, double h){
-        arr[0] = 0;
+    void sep(){
+        grid[0] = 0;
         for(int i = 1; i < N; i++){
-            arr[i] = arr[i-1] + h;
+            grid[i] = grid[i-1] + h;
         }
     }
     
     // euler method
-    void eyler(double* arr, int N, double* X, double* V){
+    void eyler(){
         for(int i = 1; i < N; i++){
             // x(i+1) = xi + dT*Vi
             // V(i+1) = v(i) - w**2*x
-            double h = arr[i] - arr[i-1];
+            double h = grid[i] - grid[i-1];
             X[i] = X[i-1] + h*V[i-1];
             V[i] = V[i-1] - h*pow(W, 2) * sin(X[i-1]);
         }
@@ -48,22 +113,22 @@ class counting{
 
     
     // hoin method
-    void hoin(double* arr, int N, double* X, double* V){
+    void hoin(){
             for(int i = 1; i < N; i++){
             // x(i+1) = xi + dT*Vi
             // V(i+1) = v(i) - w**2*x
-                double h = arr[i] - arr[i-1];
+                double h = grid[i] - grid[i-1];
                 X[i] = X[i-1] + h*(V[i-1] + V[i-1] - h*pow(W, 2) * sin(X[i-1]))/2;
                 V[i] = V[i-1] - h*pow(W, 2) * sin((X[i-1] + X[i-1] + h*V[i-1])/2); 
             } 
     }
 
-    // Runge-Kutta method of order 4 (wrong realization)
-    void RK4(double* arr, int N, double* X, double* V){
+    // Runge-Kutta method of order 4
+    void RK4(){
 
         for(int i = 1; i < N; i++){
     // ---------------------------------------------------------------
-            double h = arr[i] - arr[i-1];
+            double h = grid[i] - grid[i-1];
 
             double k1_x = h*V[i-1];
             double k1_v = h*(-pow(W, 2)*sin(X[i-1]));
@@ -83,6 +148,32 @@ class counting{
     }
 
 
+};
+
+
+class Matrix{
+    double* arr;
+    int order;
+    Matrix(int N, int ord){
+        arr = new double[N*N];
+        order = ord;
+
+    }
+    ~Matrix(){
+        delete[] arr;
+    }
+    double* operator*(double* X){
+        double* Y = new double[order];
+        for(int i = 0; i < order; i++){
+            double sum = 0;
+            for(int j = 0; j < order; j++){
+                sum += arr[4*i + j] * X[j];
+            }
+            Y[i] = sum;
+            sum = 0;
+        }
+        return Y;
+    }
 }
 
 
@@ -90,58 +181,20 @@ class counting{
 
 
 
-
-
-
-
-
-// ----------------------------------------- new interface-------------------------------------------
-
-// ------------------------- declaration of functions -----------------------------------
 void entry(double* X, double* Y, int N, string FILE);
-
 
 //-------------------------------- main --------------------------------------------------
 int main(int argc, char* argv[]){
     if(argc != 2) return 1;   // bad check
     ifstream f(argv[1]);  // read config
-    json data = json::parse(f);
+    json config = json::parse(f);
 
-    double h = data["h"];  // renaming of param
-    const int N = data["N"];
-    
-    double* arr = new double[N];  // partitioning grid
-    sep(arr, N, h);
 
-    double* X = new double[N];   // arrays of values
-    double* V = new double[N];
-    
-    X[0] = data["X0"]; // initial conditions
-    V[0] = data["V0"];
-
-    // choice of algo
-    if(data["algo"] == "eyler"){
-        eyler(arr, N, X, V);
-    }
-    else if(data["algo"] == "hoin"){
-        hoin(arr, N, X, V);
-    }
-    else if(data["algo"] == "RK4"){
-        RK4(arr, N, X, V);
-    }
-
-    json files = data["files"][0]; // not necessarily but makes easier
-
-    entry(arr, X, N, files["x"]); // output
-    entry(arr, V, N, files["v"]);
-
-    delete[] arr; // clear
-    delete[] X;
-    delete[] V;
+    entry(grid, X, N, files["x"]); // output
+    entry(grid, V, N, files["v"]);
     
     return 0;
 }
-
 
 // output
 void entry(double* X, double* Y, int N, string FILE){ 
@@ -153,6 +206,9 @@ void entry(double* X, double* Y, int N, string FILE){
     }
     file.close();
 }
+
+
+
 
 
 
