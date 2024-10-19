@@ -8,31 +8,70 @@
 
 using namespace std;
 using json = nlohmann::json; //renaming namespace
+typedef double (*FunctionPointer)(double);
 
 class equality{
+    public:
     string equation;
+    int order;
+    double W;
     equality(json config){
         equation = config["equation"];
+        order = config["order"];
     }
     ~equality(){
 
     }
-    auto make_func(){
-        if(equation == "simple_garmonic"){
-            return simple_garmonic;
-        }
-        // else if(equation == ...){
+    double _1_1(double t){return 0.;}
+    double _1_2(double t){return 1.;}
+    double _2_1(double t){return -pow(W, 2);}
+    double _2_2(double t){return 0.;}
 
-        // }
-        // else if(equation == ...){
-
-        // }
+    double* func(){
+        double (equality::*arr[])(double) = {_1_1, _1_2, _2_1, _2_2};
+        Matrix f(order, arr);
+        return 
     }
-    double* simple_garmonic(double t){
-        return()
-    }
-
 };
+
+class Matrix{
+    public:
+    FunctionPointer* arr = nullptr;
+    double* values = nullptr;
+    int order = 0;
+
+    Matrix(){
+        
+    }
+    Matrix(int ord, FunctionPointer* data){
+        arr = data;
+        order = ord;
+        values = new double[ord];
+    }
+    ~Matrix(){
+        delete[] arr;
+    }
+
+    double* init(double t){
+        for(int i = 0; i < order; i++){
+            values[i] = arr[i](t);
+        }
+    }
+    double* operator*(double* X){
+        double* Y = new double[order];
+        for(int i = 0; i < order; i++){
+            double sum = 0;
+            for(int j = 0; j < order; j++){
+                sum += values[4*i + j] * X[j];
+            }
+            Y[i] = sum;
+            sum = 0;
+        }
+        return Y;
+    }
+};
+
+
 
 class counting{
     double* grid = nullptr;
@@ -151,30 +190,6 @@ class counting{
 };
 
 
-class Matrix{
-    double* arr;
-    int order;
-    Matrix(int N, int ord){
-        arr = new double[N*N];
-        order = ord;
-
-    }
-    ~Matrix(){
-        delete[] arr;
-    }
-    double* operator*(double* X){
-        double* Y = new double[order];
-        for(int i = 0; i < order; i++){
-            double sum = 0;
-            for(int j = 0; j < order; j++){
-                sum += arr[4*i + j] * X[j];
-            }
-            Y[i] = sum;
-            sum = 0;
-        }
-        return Y;
-    }
-}
 
 
 
