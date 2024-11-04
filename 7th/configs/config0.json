@@ -1,0 +1,1 @@
+{"dim": 2, "params": [10.0], "conditions": [0.0, 10.0], "fineness": 0.001, "time_limit": 1000.0, "output_files": ["./outputs/0.csv", "./outputs/1.csv"]}
