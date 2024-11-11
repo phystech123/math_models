@@ -1,0 +1,16 @@
+{
+    "algo": "RK4",
+    "V0":5,
+    "X0":0,
+    "h":0.01,
+    "N":1000,
+    "files": [
+    {
+    "x": "datas/dataX_RK4.csv", 
+    "v": "datas/dataV_RK4.csv"
+    }
+    ],
+    "W": 10,
+    "g": 0.1,
+    "Ampl": 100
+}

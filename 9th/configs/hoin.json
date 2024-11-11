@@ -1,0 +1,17 @@
+{
+    "algo": "hoin",
+    "V0":10,
+    "X0":0,
+    "h":0.001,
+    "N":10000,
+    "files": [
+    {
+    "x": "datas/dataX_hoin.csv", 
+    "v": "datas/dataV_hoin.csv"
+    }
+    ],
+    "W": 10,
+    "g": 1,
+    "omega": 1,
+    "Ampl": 10
+}

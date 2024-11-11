@@ -17,7 +17,7 @@ int main(int argc, char* argv[]){
     if(argc != 2) return 1;   // bad check
     ifstream f(argv[1]);  // read config
     json data = json::parse(f);
-    cout << data["params"][0];
+    cout << data["params"][0KO];
 
     double h = data["fineness"];  // renaming of param
     const int N = data["time_limit"];
