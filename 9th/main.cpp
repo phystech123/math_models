@@ -16,6 +16,7 @@ void eyler(double* arr, int N, double* X, double* V);
 void entry(double* X, double* Y, int N, string FILE);
 void hoin(double* arr, int N, double* X, double* V);
 void RK4(double* arr, int N, double* X, double* V);
+double Amlitude(double* arr, int N, double* X);
 
 // ------------------------------------ parameters of system -----------------------------
 double W = 0.;
@@ -60,10 +61,14 @@ int main(int argc, char* argv[]){
         RK4(arr, N, X, V);
     }
 
-    json files = data["files"][0]; // not necessarily but makes easier
+    // json files = data["files"][0]; // not necessarily but makes easier
 
-    entry(arr, X, N, files["x"]); // output
-    entry(arr, V, N, files["v"]);
+    // entry(arr, X, N, files["x"]); // output
+    // entry(arr, V, N, files["v"]);
+    
+    int ampl = Amlitude(arr, N, X);
+    cout << ampl << " ";
+
 
     delete[] arr; // clear
     delete[] X;
@@ -125,7 +130,7 @@ void hoin(double* arr, int N, double* X, double* V){
         } 
 }
 
-// Runge-Kutta method of order 4 (wrong realization)
+// Runge-Kutta method of order 4
 void RK4(double* arr, int N, double* X, double* V){
 
     for(int i = 1; i < N; i++){
@@ -149,6 +154,22 @@ void RK4(double* arr, int N, double* X, double* V){
     }
 }
 
+
+double Amlitude(double* arr, int N, double* X){
+    int iter = 0;
+    for(int i = 0; i < N; i++){
+        iter = 0;
+        for(int j = 0; j < 10; j++){
+            if((X[i] - X[i]) < 1e-10){
+                ++iter;
+            }
+        }
+        if(iter == 100){
+            return X[i];
+        }
+    }
+    return -1;
+}
 
 
 
