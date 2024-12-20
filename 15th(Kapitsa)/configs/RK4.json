@@ -1,0 +1,13 @@
+{
+    "algo": "RK4",
+    "phi":0.1,
+    "omega":0,
+    "h":0.001,
+    "N":100000,
+    "files": [
+    {
+    "phi": "datas/data_phi.csv", 
+    "omega": "datas/data_omega.csv"
+    }
+    ]
+}
