@@ -3,6 +3,7 @@
 #include<cmath>
 #include<deque>
 #include<iomanip>
+#include<fstream>
 
 using namespace std;
 
@@ -27,8 +28,10 @@ double foo(int a, int b, int c, const int N){
 }
 
 int main(){
+    ofstream fout("data.txt");
     // int a, b, c;
-    const int N = 10000;
+    int N = 10000;
+    cin >> N;
     // cin >> a;
     // cin >> b;
     // cin >> c;
@@ -41,10 +44,11 @@ int main(){
     for(int i = 1; i <= 3; i++){
         for(int j = 1; j <= 3; j++){
             for(int k = 1; k <= 3; k++){
-                cout <<i<<' '<<j<<' '<<k<<' '<<foo(i, j, k, N) << endl;
+                fout <<i<<j<<k<<", "<<foo(i, j, k, N) << endl;
             }
         }
     }
+    fout.close();
     
     return 0;
 }
