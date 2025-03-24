@@ -61,18 +61,18 @@ public:
         //     temp1.push_back(dist1(e1));
         //     temp2.push_back(dist2(e1));
         // }
-        temp1.push_back(1);
-        temp1.push_back(2);
-        temp1.push_back(9);
+        temp1.push_back(4);
+        temp1.push_back(5);
+        temp1.push_back(6);
         temp2.push_back(1);
-        temp2.push_back(-1);
         temp2.push_back(0);
+        temp2.push_back(-1);
         
         sort(temp1.begin(), temp1.end());
 
-        AR.push_back(circle(0.1, 10, temp1[0], temp2[0], rep));
-        AR.push_back(circle(0.1, 0.1, temp1[1], temp2[1], rep));
-        AR.push_back(circle(0.1, 1000, temp1[2], temp2[2], rep));
+        AR.push_back(circle(0.1, 1, temp1[0], temp2[0], rep));
+        AR.push_back(circle(0.1, 1, temp1[1], temp2[1], rep));
+        AR.push_back(circle(0.1, 1, temp1[2], temp2[2], rep));
 
         // for(int i = 0; i < N; i++){
         //     AR.push_back(circle(0.1, 0.1, temp1[i], temp2[i], rep));
