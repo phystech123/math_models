@@ -58,58 +58,41 @@ public:
     ~foton(){}
 };
 
-
 class bond_p{
-public:
-    coord coor = {0,0};
-    coord normal = {0,0};
-    bond_p(double a, double b,
-        double c, double d){
-            coor.a = a;
-            coor.b = b;
-            normal.a = c;
-            normal.b = d;
+    public:
+        static const int m = 2;
+        static const int n = 2;
+        double A,B,C,D,E,F;
+        bond_p(double a, double b,
+            double c, double d, double e, double f):A{a}, B{b}, C{c}, D{d}, E{e}, F{f}{}
+        ~bond_p(){}
+        double check(double x, double y){
+            return A*pow(x,2) + 2*B*x*y + C*pow(y,2) + D*x + E*y + F;
         }
-    ~bond_p(){}
-};
-
-class boun_cond{
-public:
-    double width, lenght;
-    // condition on bounder
-    coord* check(coord c){
-        // ...
-        return nullptr;
-    }
-    coord* check(foton f, int i){
-        coord c = f.coor[i-1];
-        return check(c);
-    }
-};
+    };
 
 class trace{
-    boun_cond bound;
+    double rep = 1e5;
+    double t = 1e-3;
     vector<foton> light;
-    trace(boun_cond bound,
-        vector<foton> light):bound{bound}, light{light}{}
+    vector<bond_p> bond;
+    trace(vector<foton> light, vector<bond_p> bond):light{light}, bond{bond}{}
     ~trace(){}
 
     void solve(){
-        for(int i = 0; i < rep; i++){
-            for(foton f:light){
-                coord c = f.coor[i-1] + f.speed[i-1]*t;
-                coord* p_c = bound.check(c);
-                if (p_c==nullptr){
-                    f.coor[i] = c;
-                    f.speed[i] = f.speed[i-1];
+        for(int i = 1; i < rep; i++){
+            for(foton fot:light){
+                coord temp = fot.coor[i-1]+fot.speed[i-1]*t;
+                for(bond_p b: bond){
+                    if(b.check(fot.coor[i-1].a, fot.coor[i-1].b)*b.check(temp.a, temp.b) < 0){
+                        // с помощью лапака ищем перечение, потом по формуле из жпт отражаем скорости
+                    }
+                    else{
+                        fot.coor[i] = temp;
+                        fot.speed[i]=fot.speed[i-1];
+                    }
                 }
-                else{
-                    coord p = *p_c;
-                    double t_ = ((p-f.coor[i-1])*(p-f.coor[i-1]))/(f.speed[i-1]*f.speed[i-1]);
-                    f.speed[i] = (2*(f.speed[i-1]*p)/(p*p))*p - f.speed[i-1];
-                    f.coor[i] = f.speed[i]*(t-t_);
-                }
-            } 
+            }
         }
         return;
     }
@@ -120,3 +103,11 @@ int main(){
     
     return 0;
 }
+
+
+/*
+решаем так:
+в дискретном времени проверяем на гран условия
+когда графн условия решаем lapacke
+хэндлим дальше
+*/
